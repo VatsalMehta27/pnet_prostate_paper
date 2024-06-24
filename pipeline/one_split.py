@@ -189,9 +189,9 @@ class OneSplitPipeline:
 
                 # saving coefs
                 logging.info('saving coef')
-                if hasattr(model, 'save_model'):
-                    logging.info('saving coef')
-                    save_model(model, model_name, self.directory)
+                # if hasattr(model, 'save_model'):
+                #     logging.info('saving coef')
+                save_model(model, model_name, self.directory)
 
                 if self.save_train:
                     y_pred_train, y_pred_train_scores = self.predict(model, x_train, y_train)

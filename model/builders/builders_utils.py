@@ -9,6 +9,7 @@ from keras.regularizers import l2
 
 # from data.pathways.pathway_loader import get_pathway_files
 from data.pathways.reactome import ReactomeNetwork
+from data.go_ontology.go_network import GONetwork
 from model.layers_custom import Diagonal, SparseTF
 
 
@@ -37,7 +38,8 @@ def get_map_from_layer(layer_dict):
 
 
 def get_layer_maps(genes, n_levels, direction, add_unk_genes):
-    reactome_layers = ReactomeNetwork().get_layers(n_levels, direction)
+    # reactome_layers = ReactomeNetwork().get_layers(n_levels, direction)
+    reactome_layers = GONetwork().get_layers(n_levels, direction)
     filtering_index = genes
     maps = []
     for i, layer in enumerate(reactome_layers[::-1]):
