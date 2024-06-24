@@ -10,10 +10,12 @@ from keras.regularizers import l2
 # from data.pathways.pathway_loader import get_pathway_files
 from data.pathways.reactome import ReactomeNetwork
 from data.go_ontology.go_network import GONetwork
+from data.gene_interaction.gene_interaction import get_gene_interaction_layer
 from model.layers_custom import Diagonal, SparseTF
 
 
 def get_map_from_layer(layer_dict):
+    # TODO: change the name
     pathways = layer_dict.keys()
     print 'pathways', len(pathways)
     genes = list(itertools.chain.from_iterable(layer_dict.values()))
@@ -38,8 +40,14 @@ def get_map_from_layer(layer_dict):
 
 
 def get_layer_maps(genes, n_levels, direction, add_unk_genes):
-    # reactome_layers = ReactomeNetwork().get_layers(n_levels, direction)
-    reactome_layers = GONetwork().get_layers(n_levels, direction)
+    reactome_layers = ReactomeNetwork().get_layers(n_levels, direction)
+#     reactome_layers = GONetwork().get_layers(n_levels, direction)
+    all_genes = list(itertools.chain.from_iterable(reactome_layers[-1].values()))
+    all_genes = list(np.unique(all_genes))
+    gene_interaction_layer = get_gene_interaction_layer(all_genes)
+
+    reactome_layers.append(gene_interaction_layer)
+
     filtering_index = genes
     maps = []
     for i, layer in enumerate(reactome_layers[::-1]):
